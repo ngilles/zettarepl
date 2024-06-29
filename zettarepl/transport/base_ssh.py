@@ -242,10 +242,10 @@ class BaseSshTransport(Transport):
         if (private_key is None) == (private_key_location is None):
             raise ValueError("Exactly one of private-key or private-key-location must be specified")
         elif private_key:
-            data["private-key"] = private_key
+            data["private_key"] = private_key
         else:
             with open(private_key_location, "r") as f:
-                data["private-key"] = f.read()
+                data["private_key"] = f.read()
 
         data["host_key"] = data.pop("host-key")
         data["connect_timeout"] = data.pop("connect-timeout")
