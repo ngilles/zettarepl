@@ -235,7 +235,18 @@ class BaseSshTransport(Transport):
         data.setdefault("username", "root")
         data.setdefault("connect-timeout", 10)
         data.setdefault("sudo", False)
-        data["private_key"] = data.pop("private-key")
+
+        private_key = data.pop("private-key", None)
+        private_key_location = data.pop("private-key-location", None)
+
+        if (private_key is None) == (private_key_location is None):
+            raise ValueError("Exactly one of private-key or private-key-location must be specified")
+        elif private_key:
+            data["private-key"] = private_key
+        else:
+            with open(private_key_location, "r") as f:
+                data["private-key"] = f.read()
+
         data["host_key"] = data.pop("host-key")
         data["connect_timeout"] = data.pop("connect-timeout")
 
